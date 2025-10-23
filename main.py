@@ -77,11 +77,51 @@ def find_best_shipmode_by_segment(data):
     return results
 
 def write_results_to_csv(filename, results, headers):
-    """
-    Writes calculation results to a CSV file.
-    """
+
     with open(filename, mode='w', newline='', encoding='utf-8') as file:
         writer = csv.DictWriter(file, fieldnames=headers)
         writer.writeheader()
         writer.writerows(results)
-    print(f"✅ Results successfully written to {filename}")
+    print(f"Results successfully written to {filename}")
+
+#tests
+
+def test_import_csv_to_dicts():
+    data = import_csv_to_dicts("SampleSuperstore.csv")
+    assert isinstance(data, list)
+    assert isinstance(data[0], dict)
+    print("test_import_csv_to_dicts passed")
+
+def test_calculate_avg_profit_by_category_region():
+    sample = [
+        {"Category": "Furniture", "Region": "West", "Profit": "100"},
+        {"Category": "Furniture", "Region": "West", "Profit": "300"},
+        {"Category": "Office Supplies", "Region": "East", "Profit": "200"}
+    ]
+    results = calculate_avg_profit_by_category_region(sample)
+    assert any(r["Category"] == "Furniture" and r["Region"] == "West" for r in results)
+    print("test_calculate_avg_profit_by_category_region passed")
+
+def test_find_best_shipmode_by_segment():
+    sample = [
+        {"Segment": "Consumer", "Ship Mode": "First Class", "Sales": "500"},
+        {"Segment": "Consumer", "Ship Mode": "Standard Class", "Sales": "300"},
+        {"Segment": "Corporate", "Ship Mode": "Second Class", "Sales": "800"}
+    ]
+    results = find_best_shipmode_by_segment(sample)
+    assert any(r["Segment"] == "Consumer" for r in results)
+    print("test_find_best_shipmode_by_segment passed")
+
+def main():
+    data = import_csv_to_dicts("SampleSuperstore.csv")
+
+    avg_profit_results = calculate_avg_profit_by_category_region(data)
+    best_shipmode_results = find_best_shipmode_by_segment(data)
+
+    write_results_to_csv("avg_profit_by_category_region.csv", avg_profit_results,
+                         ["Category", "Region", "Average Profit"])
+    write_results_to_csv("best_shipmode_by_segment.csv", best_shipmode_results,
+                         ["Segment", "Best Ship Mode", "Average Sales"])
+
+    print(" All calculations completed successfully.")
+
