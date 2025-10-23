@@ -75,3 +75,13 @@ def find_best_shipmode_by_segment(data):
         })
 
     return results
+
+def write_results_to_csv(filename, results, headers):
+    """
+    Writes calculation results to a CSV file.
+    """
+    with open(filename, mode='w', newline='', encoding='utf-8') as file:
+        writer = csv.DictWriter(file, fieldnames=headers)
+        writer.writeheader()
+        writer.writerows(results)
+    print(f"✅ Results successfully written to {filename}")
