@@ -126,3 +126,9 @@ def main():
     print(" All calculations completed successfully.")
 
 #run
+
+if __name__ == "__main__":
+    main()
+    test_import_csv_to_dicts()
+    test_calculate_avg_profit_by_category_region()
+    test_find_best_shipmode_by_segment()
