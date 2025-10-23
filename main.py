@@ -43,3 +43,35 @@ def calculate_avg_profit_by_category_region(data):
         })
 
     return results
+
+def find_best_shipmode_by_segment(data):
+
+    sales_data = defaultdict(lambda: defaultdict(lambda: {"total_sales": 0.0, "count": 0}))
+
+    for row in data:
+        segment = row["Segment"]
+        ship_mode = row["Ship Mode"]
+        try:
+            sales = float(row["Sales"])
+        except ValueError:
+            continue
+
+        sales_data[segment][ship_mode]["total_sales"] += sales
+        sales_data[segment][ship_mode]["count"] += 1
+
+    results = []
+    for segment, modes in sales_data.items():
+        best_mode = None
+        best_avg = 0.0
+        for mode, vals in modes.items():
+            avg_sales = vals["total_sales"] / vals["count"]
+            if avg_sales > best_avg:
+                best_avg = avg_sales
+                best_mode = mode
+        results.append({
+            "Segment": segment,
+            "Best Ship Mode": best_mode,
+            "Average Sales": round(best_avg, 2)
+        })
+
+    return results
